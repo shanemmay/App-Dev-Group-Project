@@ -10,21 +10,42 @@ import UIKit
 
 class ViewControllerA: UIViewController {
 
+    @IBOutlet weak var totalPointsInput: UITextField!
+    @IBOutlet weak var totalHoursInput: UITextField!
+    @IBOutlet weak var gpaLabel: UILabel!
+    var hrs = 0
+    var pts = 0
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        print("A:\(arr[0])")
+        
+        totalPointsInput.addTarget(self, action: #selector(ViewControllerA.textFieldDidChange(_:)),
+                        for: UIControl.Event.editingChanged)
+        totalHoursInput.addTarget(self, action: #selector(ViewControllerA.textFieldDidChange(_:)),
+                                  for: UIControl.Event.editingChanged)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        hrs = Int(totalHoursInput.text!) ?? 0   //the ?? makes it so if it can't be turned into a value it sets it as 0
+        pts = Int(totalPointsInput.text!) ?? 0
+        
+        totalHrs = hrs
+        totalPts = pts
+        
+        let gpa = calcGPA(pts: pts, hrs: hrs)
+        print("\(gpa)")
+        gpaLabel.text = String(gpa)
     }
-    */
-
+    
+    func calcGPA(pts:Int, hrs:Int) -> Double
+    {
+        if(hrs < 1)
+        {
+            return 0.0;
+        }
+        return Double(pts/hrs);
+    }
 }

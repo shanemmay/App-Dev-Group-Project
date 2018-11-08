@@ -8,6 +8,18 @@
 
 import UIKit
 
+var arr = [0,1,2]
+struct Course {
+    var hrs = 0
+    var pts = 0
+    init(hrs: Int, pts: Int) {
+        self.hrs = hrs
+        self.pts = pts
+    }
+}
+var totalHrs = 0
+var totalPts = 0
+
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     /*
@@ -18,6 +30,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
                 self.newVc(viewController: "sbViewB"),
                 self.newVc(viewController: "sbViewC")]
     }()
+    var pageControl = UIPageControl()   //for the dots at the bottom of the view showing the pages in the app
     
     /*
      FUNCTIONS
@@ -26,6 +39,8 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         super.viewDidLoad()
 
         self.dataSource = self
+        self.delegate = self
+        configurePageControl()
         
         // This sets up the first view that will show up on our page control
         if let firstViewController = orderedViewControllers.first {
@@ -83,5 +98,23 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         }
         
         return orderedViewControllers[nextIndex]
+    }
+    
+    //the following is for the dots indicating the pages of the app
+    func configurePageControl() {
+        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 50,width:
+            UIScreen.main.bounds.width,height: 50))
+        self.pageControl.numberOfPages = orderedViewControllers.count
+        self.pageControl.currentPage = 0
+        self.pageControl.tintColor = UIColor.black
+        self.pageControl.pageIndicatorTintColor = UIColor.black
+        self.pageControl.currentPageIndicatorTintColor = UIColor.red
+        self.view.addSubview(pageControl)
+    }
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating
+        finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed:
+        Bool) {
+        let pageContentViewController = pageViewController.viewControllers![0]
+        self.pageControl.currentPage = orderedViewControllers.index(of: pageContentViewController)!
     }
 }
